@@ -54,15 +54,15 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
 
       - name: Build base image
-        working-directory: /workspaces/base_image
+        working-directory: ./workspaces/base_image
         run: make build
         
       - name: Build task image
-        working-directory: /workspaces/tasks/${{ steps.extract-task.outputs.task_name }}
+        working-directory: ./workspaces/tasks/${{ steps.extract-task.outputs.task_name }}
         run: make build
         
       - name: Create config file
-        working-directory: /evaluation
+        working-directory: ./evaluation
         run: |
           cat > config.toml << EOF
           [core]
@@ -74,7 +74,7 @@ jobs:
           EOF
         
       - name: Run evaluation
-        working-directory: /evaluation
+        working-directory: ./evaluation
         run: |
           poetry install
           poetry run python run_eval.py \
