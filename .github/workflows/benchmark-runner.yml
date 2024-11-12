@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  process-comment:
+  run-evaluation:
     if: startsWith(github.event.comment.body, '/run-eval')
     runs-on: ubuntu-latest
     permissions:

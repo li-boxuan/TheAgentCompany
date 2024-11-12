@@ -210,6 +210,9 @@ if __name__ == '__main__':
     if llm_config is None:
         raise ValueError(f'Could not find LLM config: --llm_config {args.llm_config}')
 
+    if llm_config.api_key is None:
+        raise ValueError(f'LLM API key is not set')
+
     logger.info(f"Task image name is {args.task_image_name}")
     config: AppConfig = get_config(args.task_image_name, os.path.abspath(args.outputs_path), llm_config)
     runtime: Runtime = create_runtime(config)
