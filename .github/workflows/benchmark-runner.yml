@@ -72,6 +72,12 @@ jobs:
           base_url="${{ secrets.LLM_BASE_URL }}"
           api_key="${{ secrets.LLM_API_KEY }}"
           EOF
+
+      - name: Set directory permissions
+        working-directory: ./evaluation
+        run: |
+          mkdir -p outputs
+          chmod -R 777 outputs
         
       - name: Run evaluation
         working-directory: ./evaluation
