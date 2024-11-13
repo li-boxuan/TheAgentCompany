@@ -81,13 +81,34 @@ jobs:
             --llm-config eval \
             --server-hostname ogma.lti.cs.cmu.edu \
             --task-image-name "${{ steps.extract-task.outputs.task_name }}-image"
+
+      - name: Read evaluation results
+        id: read-results
+        if: always()
+        run: |
+          RESULT_FILE="./evaluation/outputs/eval_${{ steps.extract-task.outputs.task_name }}-image.json"
+          if [ -f "$RESULT_FILE" ]; then
+            echo "result<<EOF" >> $GITHUB_OUTPUT
+            cat "$RESULT_FILE" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "result=Error: Evaluation result file not found" >> $GITHUB_OUTPUT
+          fi
             
       - name: Comment on results
         uses: peter-evans/create-or-update-comment@v4
         if: always()
         with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            Evaluation completed for task: ${{ steps.extract-task.outputs.task_name }}
-            
-            Check the detailed results [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            issue-number: ${{ github.event.issue.number }}
+            body: |
+              Evaluation completed for task: ${{ steps.extract-task.outputs.task_name }}
+
+              Check the detailed logs [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+  
+              <details>
+              <summary>Evaluation Result</summary>
+  
+              ```json
+              ${{ steps.read-results.outputs.result }}
+              ```
+              </details>
