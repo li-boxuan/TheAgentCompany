@@ -95,9 +95,9 @@ jobs:
         run: |
           RESULT_FILE="outputs/eval_${{ steps.extract-task.outputs.task_name }}-image.json"
           if [ -f "$RESULT_FILE" ]; then
-            echo "result=$(base64 -w 0 "$RESULT_FILE")" >> $GITHUB_OUTPUT
+            echo "$(base64 -w 0 "$RESULT_FILE")" >> $GITHUB_OUTPUT
           else
-            echo "result=Error: Evaluation result file not found" >> $GITHUB_OUTPUT
+            echo "{'error': 'Evaluation result file not found'}" >> $GITHUB_OUTPUT
           fi
     
       - name: Comment on results
