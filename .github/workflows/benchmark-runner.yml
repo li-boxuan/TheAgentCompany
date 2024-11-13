@@ -95,9 +95,14 @@ jobs:
         run: |
           RESULT_FILE="outputs/eval_${{ steps.extract-task.outputs.task_name }}-image.json"
           if [ -f "$RESULT_FILE" ]; then
-            echo "$(base64 -w 0 "$RESULT_FILE")" >> $GITHUB_OUTPUT
+            content=$(cat "$RESULT_FILE")
+            {
+              echo "result<<EOF"
+              echo "$content"
+              echo "EOF"
+            } >> $GITHUB_OUTPUT
           else
-            echo "{'error': 'Evaluation result file not found'}" >> $GITHUB_OUTPUT
+            echo "result=Error: Evaluation result file not found" >> $GITHUB_OUTPUT
           fi
     
       - name: Comment on results
@@ -107,13 +112,13 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             Evaluation completed for task: ${{ steps.extract-task.outputs.task_name }}
-    
+            
             Check the detailed logs [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-      
+          
             <details>
-            <summary>Evaluation Result</summary>
-      
-            ```json
-            ${{ fromJSON(steps.read-results.outputs.result) }}
-            ```
+              <summary>Evaluation Result</summary>
+          
+              ```json
+              ${{ steps.read-results.outputs.result }}
+              ```
             </details>
