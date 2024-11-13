@@ -91,16 +91,15 @@ jobs:
       - name: Read evaluation results
         id: read-results
         if: always()
+        working-directory: ./evaluation
         run: |
-          RESULT_FILE="./evaluation/outputs/eval_${{ steps.extract-task.outputs.task_name }}-image.json"
+          RESULT_FILE="outputs/eval_${{ steps.extract-task.outputs.task_name }}-image.json"
           if [ -f "$RESULT_FILE" ]; then
-            echo "result<<EOF" >> $GITHUB_OUTPUT
-            cat "$RESULT_FILE" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            echo "result=$(base64 -w 0 "$RESULT_FILE")" >> $GITHUB_OUTPUT
           else
             echo "result=Error: Evaluation result file not found" >> $GITHUB_OUTPUT
           fi
-            
+    
       - name: Comment on results
         uses: peter-evans/create-or-update-comment@v4
         if: always()
@@ -108,13 +107,13 @@ jobs:
             issue-number: ${{ github.event.issue.number }}
             body: |
               Evaluation completed for task: ${{ steps.extract-task.outputs.task_name }}
-
+    
               Check the detailed logs [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-  
+      
               <details>
               <summary>Evaluation Result</summary>
-  
+      
               ```json
-              ${{ steps.read-results.outputs.result }}
+              ${{ fromJSON(steps.read-results.outputs.result) }}
               ```
               </details>
