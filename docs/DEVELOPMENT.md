@@ -8,11 +8,11 @@ All services (GitLab, ownCloud, Rocket.Chat, Plane) are pre-baked with data. If 
 
 **GitLab:** Please refer to [this](../servers/gitlab/README.md) for more details.
 
-**OwnCloud** TODO
+**OwnCloud** Please create a GitHub issue if you want to modify the data on your self-hosted server.
 
 **Rocket.Chat:** After the service starts, run `backup-rocketchat` to back up the service, and run `restore-rocketchat` to restore the service.
 
-**Plane:** TODO
+**Plane:** Please create a GitHub issue if you want to modify the data on your self-hosted server.
 
 ## Contribute to a task
 
