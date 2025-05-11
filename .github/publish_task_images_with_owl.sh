@@ -29,6 +29,13 @@ docker pull "$image_name:$VERSION"
 # Build and publish each task image
 for task_dir in workspaces/tasks/*/; do
     task_name=$(basename "$task_dir")
+
+    # skip task "ml-generate-gradcam" which is too large to build on GitHub Actions
+    # it's okay to skip because evaluation script would then build OWL dependencies on the fly
+    if [ "$task_name" == "ml-generate-gradcam" ]; then
+        continue
+    fi
+
     image_name="$GITHUB_REGISTRY/$GITHUB_USERNAME/$task_name-owl-image"
     
     echo "Building $task_name..."
