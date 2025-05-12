@@ -22,6 +22,9 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
     # Create the results directory
     echo "Creating results directory for $TASK_NAME..."
     mkdir -p ./results/${TASK_NAME}
+
+    # Check if container with the same name exists and remove it if it does
+    sudo docker rm -f ${TASK_NAME} 2>/dev/null || true
     
     # Run the Docker container
     echo "Running Docker container for $TASK_NAME..."
