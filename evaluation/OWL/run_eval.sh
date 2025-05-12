@@ -14,11 +14,17 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
     fi
     
     echo "Processing task: $TASK_NAME"
+
+    # Skip tasks that have already been evaluated
+    if [ -d "./results/${TASK_NAME}" ]; then
+        echo "Skipping $TASK_NAME because it has already been evaluated"
+        continue
+    fi
     
     # Pull the Docker image
     echo "Pulling Docker image for $TASK_NAME..."
     sudo docker pull ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest
-    
+
     # Create the results directory
     echo "Creating results directory for $TASK_NAME..."
     mkdir -p ./results/${TASK_NAME}
