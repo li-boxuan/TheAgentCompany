@@ -23,8 +23,16 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
     echo "Creating results directory for $TASK_NAME..."
     mkdir -p ./results/${TASK_NAME}
 
-    # Check if container with the same name exists and remove it if it does
+    # Stop and remove any container using the image
+    sudo docker stop $(sudo docker ps -a -q --filter ancestor=ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest) 2>/dev/null || true
+    sudo docker rm $(sudo docker ps -a -q --filter ancestor=ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest) 2>/dev/null || true
+    
+    # Also remove the container by name if it exists
     sudo docker rm -f ${TASK_NAME} 2>/dev/null || true
+    
+    # Now remove the image (using force if needed)
+    sudo docker rmi -f ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest 2>/dev/null || true
+
     
     # Run the Docker container
     echo "Running Docker container for $TASK_NAME..."
