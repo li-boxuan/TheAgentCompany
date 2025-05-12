@@ -25,7 +25,7 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
     
     # Run the Docker container
     echo "Running Docker container for $TASK_NAME..."
-    sudo docker run --name ${TASK_NAME} --network host -it -v ./results/${TASK_NAME}:/host_output \
+    sudo docker run --name ${TASK_NAME} --network host -v ./results/${TASK_NAME}:/host_output \
         --env-file .env ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest /bin/bash -c \
         "wget -O run_script.sh https://raw.githubusercontent.com/li-boxuan/owl/gaia58.18-on-tac/owl/run_theagentcompany.sh && \
         chmod +x run_script.sh && \
