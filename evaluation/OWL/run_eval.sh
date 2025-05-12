@@ -44,9 +44,15 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
         cp -r ./owl/output/* /host_output/"
     
     # Clean up
-    echo "Cleaning up for $TASK_NAME..."
-    docker image rm ghcr.io/li-boxuan/${TASK_NAME}-owl-image
-    docker system prune -f
+    # Stop and remove any container using the image
+    sudo docker stop $(sudo docker ps -a -q --filter ancestor=ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest) 2>/dev/null || true
+    sudo docker rm $(sudo docker ps -a -q --filter ancestor=ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest) 2>/dev/null || true
+    
+    # Also remove the container by name if it exists
+    sudo docker rm -f ${TASK_NAME} 2>/dev/null || true
+    
+    # Now remove the image (using force if needed)
+    sudo docker rmi -f ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest 2>/dev/null || true
     
     echo "Completed task: $TASK_NAME"
     echo "----------------------------------------"
