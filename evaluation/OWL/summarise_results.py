@@ -257,7 +257,17 @@ def main():
     # Print individual file results
     for task_name, total, result, score, is_perfect, task_nature in detailed_results:
         perfect_marker = " ⭐" if is_perfect else ""
-        print(f"| {task_name} | {total:,} | {result:,} | {score:.2f}{perfect_marker} | {traj_results[task_name]} | {cost_results[task_name]:.2f} |")
+        if task_name in traj_results:
+            traj_result = traj_results[task_name]
+        else:
+            print(f"WARNING: {task_name} not found in traj_results")
+            traj_result = 0
+        if task_name in cost_results:
+            cost_result = cost_results[task_name]
+        else:
+            print(f"WARNING: {task_name} not found in cost_results")
+            cost_result = 0
+        print(f"| {task_name} | {total:,} | {result:,} | {score:.2f}{perfect_marker} | {traj_result} | {cost_result:.2f} |")
     
     # Print summary section
     print("\n## Summary\n")
