@@ -21,10 +21,6 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
         continue
     fi
     
-    # Pull the Docker image
-    echo "Pulling Docker image for $TASK_NAME..."
-    sudo docker pull ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest
-
     # Create the results directory
     echo "Creating results directory for $TASK_NAME..."
     mkdir -p ./results/${TASK_NAME}
@@ -36,9 +32,9 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
     # Also remove the container by name if it exists
     sudo docker rm -f ${TASK_NAME} 2>/dev/null || true
     
-    # Now remove the image (using force if needed)
-    sudo docker rmi -f ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest 2>/dev/null || true
-
+    # Pull the Docker image
+    echo "Pulling Docker image for $TASK_NAME..."
+    sudo docker pull ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest
     
     # Run the Docker container
     echo "Running Docker container for $TASK_NAME..."
