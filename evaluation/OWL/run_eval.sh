@@ -57,9 +57,6 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
     # Also remove the container by name if it exists
     sudo docker rm -f ${TASK_NAME} 2>/dev/null || true
     
-    # Now remove the image (using force if needed)
-    sudo docker rmi -f ghcr.io/li-boxuan/${TASK_NAME}-owl-image:latest 2>/dev/null || true
-    
     echo "Completed task: $TASK_NAME"
     echo "----------------------------------------"
     
