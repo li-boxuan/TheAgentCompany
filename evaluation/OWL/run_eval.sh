@@ -16,7 +16,7 @@ while IFS= read -r TASK_NAME || [ -n "$TASK_NAME" ]; do
     echo "Processing task: $TASK_NAME"
 
     # Skip tasks that have already been evaluated
-    if [ -d "./results/${TASK_NAME}" ] && ls ./results/${TASK_NAME}/eval_* 1> /dev/null 2>&1; then
+    if [ -d "./results/${TASK_NAME}" ] && ls ./results/${TASK_NAME}/eval_* 1> /dev/null 2>&1 && ls ./results/${TASK_NAME}/chat_* 1> /dev/null 2>&1; then
         echo "Skipping $TASK_NAME because it has already been evaluated"
         continue
     fi
