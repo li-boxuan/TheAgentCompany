@@ -143,6 +143,8 @@ def analyze_folder(folder_path: str) -> Tuple[Dict[str, Tuple[int, int]], Dict[s
         key = os.path.basename(os.path.dirname(filepath))
         cost_results[key] = cost
 
+    # if a key doesn't exist in traj_results or cost_results, remove it from eval_results
+    eval_results = {k: v for k, v in eval_results.items() if k in traj_results and k in cost_results}
     return eval_results, traj_results, cost_results
 
 def get_task_nature_category(task_name: str) -> str:
